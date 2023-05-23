@@ -1,9 +1,9 @@
-drop table Review;
-drop table Returns;
-drop table Transactions;
-drop table Product;
-drop table Buyer;
-drop table Seller;
+--drop table Review;
+--drop table Returns;
+--drop table Transactions;
+--drop table Product;
+--drop table Buyer;
+--drop table Seller;
 
 create table Seller (
 seller_id number not null,
