@@ -1,4 +1,6 @@
 set serveroutput on
+
+
 declare
     --Variable declaration
     counter number;
@@ -101,5 +103,44 @@ begin
     fetch seller_cursor into seller_row.shop_name, revenue;
     end loop;
     close seller_cursor;
+    
+    --Function
+    dbms_output.put_line (CalculateTotalPrice(1));
+    
+    --Procedure
+    GetProductDetails(1);
+
+end;
+/
+
+create or replace procedure GetProductDetails(p_product_id in number)
+as
+    v_product_name varchar(50);
+    v_seller_name varchar(50);
+    v_price number;
+begin
+    select product_name, shop_name, price
+    into v_product_name, v_seller_name, v_price
+    from Product, Seller
+    where Product.seller_id = Seller.seller_id
+    and Product.product_id = p_product_id;
+    
+    dbms_output.put_line('product: ' || v_product_name || 
+        'seller: ' || v_seller_name || 'price: ' || v_price);
+end;
+/
+
+create or replace function CalculateTotalPrice(p_transaction_no in number)
+return number
+is
+    v_total_price number := 0;
+begin
+    select sum(quantity * price)
+    into v_total_price
+    from transactions, product
+    where transactions.product_id = product.product_id
+    and transactions.transaction_no = p_transaction_no;
+
+    return v_total_price;
 end;
 /
